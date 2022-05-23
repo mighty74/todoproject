@@ -23,6 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '******'
 
+# 上手くいかなかった
+#try:
+#    from .local_settings import *
+#except ImportError:
+#    pass
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
