@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block header %}
+<link rel = "stylesheet" href = "{% static 'css/list.css' %}">
+{% endblock header %}
+
+{% block content %}
+<div class = "jumbotron jumbotron-fluid">
+        <div class = "container">
+            <h1 class = "display-4">Todoカレンダー</h1>
+            <p class = "lead">Todolistがカレンダー形式で表示されます</p>
+        </div>
+</div>
+    
+<div class = "container">
+    <p class="btn-content">
+        <a href="{% url 'create2' %}" class="btn btn-success btn-lg" tabindex="-1" role="button" aria-disabled="true">新規作成</a>
+        <a href="{% url 'todolist' %}" class="btn btn-success btn-lg" tabindex="-1" role="button" aria-disabled="true">todoリスト</a>
+    </p>
+</div>
+
+<div class = "container">
+    {% if month != 1 %}
+        <h1 class = "display-4">{{ year }}年</h1>
+    {% endif %}
+</div>
+<div class = "container">
+    {% if day != 1 %}
+        <h1 class = "display-4">{{ month }}月</h1>
+    {% endif %}
+</div>
+
+{% for day_list in articles %}
+    <div class = "container">
+    {% if day_list.day == 1 %}
+        {% if day_list.month == 1 %}
+            <h1 class = "display-4">{{ day_list.year }}年</h1>
+        {% endif %}
+        <h1 class = "display-4">{{ day_list.month }}月</h1>
+    {% endif %}
+    </div>
+    <div class = "one_box">
+        <div class = "container">
+            <h1>{{ day_list.day }}日</h1>
+            {% for list in calendar %}
+                {% if list.deadline.year == day_list.year %}
+                    {% if list.deadline.month == day_list.month %}
+                        {% if list.deadline.day == day_list.day %}
+                            <h2 class = "container">{{ list.title }}</h2>
+                            <div class = "btn">
+                                <p class="btn-content">
+                                    <a href="{% url 'detail2' list.pk %}" class="btn btn-info" tabindex="-1" role="button" aria-disabled="true">詳細</a>
+                                    <a href="{% url 'update2' list.pk %}" class="btn btn-primary" tabindex="-1" role="button" aria-disabled="true">編集</a>
+                                    <a href="{% url 'delete2' list.pk %}" class="btn btn-danger" tabindex="-1" role="button" aria-disabled="true">削除</a>
+                                </p>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endfor%}
+        </div>
+    </div>
+    <hr>
+{% endfor %}
+
+<div class="pager">
+    <!-- 前のページへのリンク -->
+    {% if articles.has_previous %}
+        <a href="?p={{ articles.previous_page_number }}">前へ</a>
+    {% endif %}
+
+    <!-- 現在のページ番号と全体のページ数 -->
+    <span>
+        {{ articles.number }} / {{ articles.paginator.num_pages }}
+    </span>
+
+    <!-- 次のページへのリンク -->
+    {% if articles.has_next %}
+        <a href="?p={{ articles.next_page_number }}">次へ</a>
+    {% endif %}
+</div>
+{% endblock content %}
